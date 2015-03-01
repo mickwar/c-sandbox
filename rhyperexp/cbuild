@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# For compiling C code
+# std=c99, using c99 convention (stanard)
+# terms at the end are for some libraries (links)
+
+gcc -std=c99 -o cout main.c -lm
