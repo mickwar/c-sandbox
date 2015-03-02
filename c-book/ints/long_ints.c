@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-/* Supposed you need N booleans */
+/* Suppose you need N booleans */
 
 int main(){
     /* long long int is 64 bits */

@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-// from the MCMC book
+// from the MCMC book (this does not work)
 long int kiss (unsigned long *i, unsigned long *j,
     unsigned long *k){
     *j = *j ^ (*j << 17);
