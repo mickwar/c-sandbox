@@ -35,6 +35,10 @@ int main(int argc, char* argv[]){
         printf("usage: rhyperexp n lambda_1 ... lambda_n p_1 ... p_n\n");
         return 1;
         }
+
+    // set random seed
+    srand(time(NULL));  
+
     int n = atoi(argv[1]);
     int nparam = (argc-1) / 2;
     double lambda[nparam];
