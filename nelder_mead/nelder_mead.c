@@ -6,14 +6,22 @@
 
 
 const double ALPHA = 1.0;
-const double GAMMA = 2.0;
-const double RHO   = -0.5;
-const double SIGMA = 0.5;
+const double GAMMA = 1.0;
+const double RHO   = -0.1;
+const double SIGMA = 0.1;
 
-double himmelblau(double* x){
+// himmelblau's function
+// double optimize(double* x){
+//     double a = x[0];
+//     double b = x[1];
+//     return pow(pow(a, 2) + b - 11.0, 2) + pow(a + pow(b, 2) - 7.0, 2);
+//     }
+
+// rosenbrock's banana function
+double optimize(double* x){
     double a = x[0];
     double b = x[1];
-    return pow(pow(a, 2) + b - 11.0, 2) + pow(a + pow(b, 2) - 7.0, 2);
+    return pow(1.0 - a, 2) + 100.0 * pow(b - pow(a, 2), 2);
     }
 
 double runif(double a, double b){
@@ -48,17 +56,34 @@ void order(double* x, int n, int out[n]){
 int main(){
     srand(time(0)*getpid());
 
-    // start with N+1 vertices, N = 2 for himmelblau function
+    // start with N+1 vertices, N = 2 for himmelblau (or bananan) function
     int N = 2;
     double x[N+1][N];   // x,y-coordindates
     double f_val[N+1];  // functional values at x, y
     for (int i=0; i < N+1; i++){
-//      for (int j=0; j < N; j++){
+        for (int j=0; j < N; j++){
 //          x[i][j] = runif(-10.0, 10.0);
-//          x[i][j] = runif(1.5, 3.5);
-//          }
-        x[i][0] = runif(-2.5, -3.5);
-        x[i][1] = runif(2.5, 3.5);
+            x[i][j] = runif(1.2, 1.5);
+            }
+//      x[i][0] = runif(0.1, 2.1);
+//      x[i][1] = runif(0.1, 2.1);
+        }
+
+//  x[0][0] = 1.0;
+//  x[0][1] = 0.5;
+
+//  x[1][0] = 1.0;
+//  x[1][1] = 1.2;
+
+//  x[2][0] = -0.4;
+//  x[2][1] = 1.2;
+
+//  printf("Start values:\n");
+    for (int i=0; i < N+1; i++){
+        for (int j=0; j < N; j++){
+            printf("%f ", x[i][j]);
+            }
+        printf("\n");
         }
 
     // some initialize
@@ -72,27 +97,28 @@ int main(){
     double fe;
     double fc;
 
-    int yes_print = 0;
+    int yes_print = 1;
+    int print_vals = 1;
 
-    while (iter < 100){
+    while (iter < 30){
         iter++;
         if (yes_print)
-            printf("Iteration: %d\n", iter);
+            printf("\nIteration: %d\n", iter);
 
         // (0) recompute functional values
         for (int i=0; i < N+1; i++)
-            f_val[i] = himmelblau(x[i]);
+            f_val[i] = optimize(x[i]);
 
         // (1) Order
-        if (yes_print)
-            printf("Order\n");
+//      if (yes_print)
+//          printf("Order\n");
         order(f_val, N+1, sorted);
         // x[sorted[0]][.] is best point
         // x[sorted[N]][.] is worst point
 
         // (2) Calculate centroid (except for point N+1)
-        if (yes_print)
-            printf("Centroid\n");
+//      if (yes_print)
+//          printf("Centroid\n");
         for (int i=0; i < N; i++){
             for (int j=0; j < N; j++){
                 x0[j] = x0[j] + x[sorted[i]][j];
@@ -102,22 +128,22 @@ int main(){
             x0[j] = 1.0 * x0[j] / N;
 
         // (3) Reflection
-        if (yes_print)
-            printf("Reflection\n");
         for (int j=0; j < N; j++)
             xr[j] = x0[j] + ALPHA*(x0[j] - x[sorted[N]][j]);
-        fr = himmelblau(xr);
+        fr = optimize(xr);
         if (f_val[sorted[0]] <= fr && fr < f_val[sorted[N-1]]){
+            if (yes_print)
+                printf("Reflection\n");
             for (int j=0; j < N; j++)
                 x[sorted[N]][j] = xr[j];
         } else {
             // (4) Expansion
-            if (yes_print)
-                printf("Expansion\n");
             if (fr < f_val[sorted[0]]){
+                if (yes_print)
+                    printf("Expansion\n");
                 for (int j=0; j < N; j++)
                     xe[j] = x0[j] + GAMMA*(x0[j] - x[sorted[N]][j]);
-                fe = himmelblau(xe);
+                fe = optimize(xe);
                 if (fe < fr){
                     for (int j=0; j < N; j++)
                         x[sorted[N]][j] = xe[j];
@@ -127,12 +153,12 @@ int main(){
                     }
             } else {
                 // (5) Contraction
-                if (yes_print)
-                    printf("Contraction\n");
                 for (int j=0; j < N; j++)
                     xc[j] = x0[j] + RHO*(x0[j] - x[sorted[N]][j]);
-                fc = himmelblau(xc);
+                fc = optimize(xc);
                 if (fc < f_val[sorted[N]]){
+                    if (yes_print)
+                        printf("Contraction\n");
                     for (int j=0; j < N; j++)
                         x[sorted[N]][j] = xc[j];
                 } else {
@@ -148,6 +174,14 @@ int main(){
                     }
                 }
             }
+        if (print_vals){
+            for (int i=0; i < N+1; i++){
+                for (int j=0; j < N; j++){
+                    printf("%f ", x[i][j]);
+                    }
+                printf("\n");
+                }
+            }
         }
 
 //  for (int i=0; i < N+1; i++)
@@ -155,15 +189,14 @@ int main(){
 //  printf("\n");
 
 
-    for (int i=0; i<N+1; i++){
-        for (int j=0; j<N; j++){
-            printf("%f ", x[i][j]);
-            }
-        printf("\n");
-        }
+//  printf("\nConverged values:\n");
+//  for (int i=0; i<N+1; i++){
+//      for (int j=0; j<N; j++){
+//          printf("%f ", x[i][j]);
+//          }
+//      printf("%f\n", f_val[i]);
+//      }
         
-
-    
 
     return 0; 
     }
