@@ -6,9 +6,9 @@
 
 
 const double ALPHA = 1.0;
-const double GAMMA = 1.0;
-const double RHO   = -0.1;
-const double SIGMA = 0.1;
+const double GAMMA = 2.0;
+const double RHO   = -0.5;
+const double SIGMA = 0.5;
 
 // himmelblau's function
 // double optimize(double* x){
@@ -18,14 +18,29 @@ const double SIGMA = 0.1;
 //     }
 
 // rosenbrock's banana function
-double optimize(double* x){
-    double a = x[0];
-    double b = x[1];
-    return pow(1.0 - a, 2) + 100.0 * pow(b - pow(a, 2), 2);
-    }
+ double optimize(double* x){
+     double a = x[0];
+     double b = x[1];
+     return pow(1.0 - a, 2) + 100.0 * pow(b - pow(a, 2), 2);
+     }
 
 double runif(double a, double b){
     return ((double)rand()/(double)RAND_MAX)*(b-a)+a;
+    }
+
+// stopping rule
+double stop(double* x, int n){
+    double mean = 0;
+    for (int i=0; i < n; i ++){
+        mean = mean + x[i];
+        }
+    mean = 1.0 * mean / n;
+    double mse = 0;
+    for (int i=0; i < n; i ++){
+        mse = mse + pow(x[i] - mean, 2);
+        }
+    mse = sqrt(1.0 * mse / n);
+    return mse;
     }
 
 // get the order of the sorted index
@@ -62,21 +77,12 @@ int main(){
     double f_val[N+1];  // functional values at x, y
     for (int i=0; i < N+1; i++){
         for (int j=0; j < N; j++){
-//          x[i][j] = runif(-10.0, 10.0);
-            x[i][j] = runif(1.2, 1.5);
+            x[i][j] = runif(-2.0, 2.0);
+//          x[i][j] = runif(1.2, 1.5);
             }
-//      x[i][0] = runif(0.1, 2.1);
-//      x[i][1] = runif(0.1, 2.1);
         }
-
-//  x[0][0] = 1.0;
-//  x[0][1] = 0.5;
-
-//  x[1][0] = 1.0;
-//  x[1][1] = 1.2;
-
-//  x[2][0] = -0.4;
-//  x[2][1] = 1.2;
+    for (int i=0; i < N+1; i++)
+        f_val[i] = optimize(x[i]);
 
 //  printf("Start values:\n");
     for (int i=0; i < N+1; i++){
@@ -97,10 +103,10 @@ int main(){
     double fe;
     double fc;
 
-    int yes_print = 1;
-    int print_vals = 1;
+    int yes_print = 0;
+    int print_vals = 0;
 
-    while (iter < 30){
+    while (stop(f_val, N+1) > 1e-8){
         iter++;
         if (yes_print)
             printf("\nIteration: %d\n", iter);
@@ -119,6 +125,8 @@ int main(){
         // (2) Calculate centroid (except for point N+1)
 //      if (yes_print)
 //          printf("Centroid\n");
+        for (int j=0; j < N; j++)
+            x0[j] = 0;
         for (int i=0; i < N; i++){
             for (int j=0; j < N; j++){
                 x0[j] = x0[j] + x[sorted[i]][j];
@@ -189,13 +197,13 @@ int main(){
 //  printf("\n");
 
 
-//  printf("\nConverged values:\n");
-//  for (int i=0; i<N+1; i++){
-//      for (int j=0; j<N; j++){
-//          printf("%f ", x[i][j]);
-//          }
-//      printf("%f\n", f_val[i]);
-//      }
+    printf("\nConverged values:\n");
+    for (int i=0; i<N+1; i++){
+        for (int j=0; j<N; j++){
+            printf("%f ", x[i][j]);
+            }
+        printf("%f\n", f_val[i]);
+        }
         
 
     return 0; 
