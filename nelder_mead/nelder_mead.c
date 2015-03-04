@@ -11,18 +11,18 @@ const double RHO   = -0.5;
 const double SIGMA = 0.5;
 
 // himmelblau's function
+double optimize(double* x){
+    double a = x[0];
+    double b = x[1];
+    return pow(pow(a, 2) + b - 11.0, 2) + pow(a + pow(b, 2) - 7.0, 2);
+    }
+
+// rosenbrock's banana function
 // double optimize(double* x){
 //     double a = x[0];
 //     double b = x[1];
-//     return pow(pow(a, 2) + b - 11.0, 2) + pow(a + pow(b, 2) - 7.0, 2);
+//     return pow(1.0 - a, 2) + 100.0 * pow(b - pow(a, 2), 2);
 //     }
-
-// rosenbrock's banana function
- double optimize(double* x){
-     double a = x[0];
-     double b = x[1];
-     return pow(1.0 - a, 2) + 100.0 * pow(b - pow(a, 2), 2);
-     }
 
 double runif(double a, double b){
     return ((double)rand()/(double)RAND_MAX)*(b-a)+a;
@@ -75,21 +75,32 @@ int main(){
     int N = 2;
     double x[N+1][N];   // x,y-coordindates
     double f_val[N+1];  // functional values at x, y
-    for (int i=0; i < N+1; i++){
-        for (int j=0; j < N; j++){
-            x[i][j] = runif(-2.0, 2.0);
+//  for (int i=0; i < N+1; i++){
+//      for (int j=0; j < N; j++){
+//          x[i][j] = runif(-2.0, 2.0);
 //          x[i][j] = runif(1.2, 1.5);
-            }
-        }
+//          }
+//      }
+    x[0][0] = 4.0;
+    x[0][1] = -4.0;
+    x[1][0] = -4.0;
+    x[1][1] = 4.0;
+    x[2][0] = -4.0;
+    x[2][1] = -4.0;
+
     for (int i=0; i < N+1; i++)
         f_val[i] = optimize(x[i]);
 
-//  printf("Start values:\n");
-    for (int i=0; i < N+1; i++){
-        for (int j=0; j < N; j++){
-            printf("%f ", x[i][j]);
+    int yes_print = 0;
+    int print_vals = 1;
+
+    if (print_vals){
+        for (int i=0; i < N+1; i++){
+            for (int j=0; j < N; j++){
+                printf("%f ", x[i][j]);
+                }
+            printf("\n");
             }
-        printf("\n");
         }
 
     // some initialize
@@ -103,8 +114,6 @@ int main(){
     double fe;
     double fc;
 
-    int yes_print = 0;
-    int print_vals = 0;
 
     while (stop(f_val, N+1) > 1e-8){
         iter++;
@@ -197,13 +206,13 @@ int main(){
 //  printf("\n");
 
 
-    printf("\nConverged values:\n");
-    for (int i=0; i<N+1; i++){
-        for (int j=0; j<N; j++){
-            printf("%f ", x[i][j]);
-            }
-        printf("%f\n", f_val[i]);
-        }
+//  printf("\nConverged values:\n");
+//  for (int i=0; i<N+1; i++){
+//      for (int j=0; j<N; j++){
+//          printf("%f ", x[i][j]);
+//          }
+//      printf("%f\n", f_val[i]);
+//      }
         
 
     return 0; 
