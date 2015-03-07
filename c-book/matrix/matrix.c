@@ -1,4 +1,9 @@
 #include <stdio.h>
+#include <cholesky.h>
+
+double runif(double a, double b){
+    return ((double)rand()/(double)RAND_MAX)*(b-a)+a;
+    }
 
 // print a matrix
 void mat_print(int n, int m, double x[n][m]){
@@ -35,27 +40,35 @@ void mat_mult(int a_n, int a_m, int b_n, int b_m,
     }
 
 int main () {
-    int n = 4;
+    srand(0);
+    int n = 11;
     int m = 7;
     double matA[n][m];
     double matB[m][n]; // for the transpose
-    double matC[n][n]; // for the multipication
+    double matC[m][m]; // for the multipication
 
     for (int i=0; i<n; i++){
         for (int j=0; j<m; j++){
-            matA[i][j] = (i+1.0)*(j+1.0);
+//          matA[i][j] = (i+0.1)*(j-0.1);
+            matA[i][j] = runif(0, 1);
             matB[j][i] = 0;
             }
         }
 
     transpose(n, m, matA, matB);
-    mat_mult(n, m, m, n, matA, matB, matC);
+    mat_mult(m, n, n, m, matB, matA, matC);
 
     mat_print(n, m, matA);
     printf("\n");
     mat_print(m, n, matB);
     printf("\n");
-    mat_print(n, n, matC);
+    mat_print(m, m, matC);
+
+    double chol[m][m];
+    cholesky(m, matC, chol);
+    printf("\n");
+    mat_print(m, m, chol);
+    
 
     return 0;
     }
