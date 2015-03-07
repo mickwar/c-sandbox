@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "cholesky.h"
+// #include "determinant.h"
 
 // use < > for standard headers
 // use " " for headers in the same directory as source code
@@ -73,6 +74,12 @@ int main () {
     cholesky(m, matC, chol);
     printf("\n");
     mat_print(m, m, chol);
+
+//  double xdet = 0;
+//  xdet = det(m, chol);
+//  printf("\n");
+//  printf("%f\n", xdet);
+    
     
 
     return 0;
