@@ -1,9 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <math.h>
-#include <time.h>
-#include <unistd.h>
-
 
 void cholesky(int n, double x[n][n], double out[n][n]){
     for (int j=0; j<n; j++){

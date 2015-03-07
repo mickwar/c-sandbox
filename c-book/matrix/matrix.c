@@ -1,5 +1,9 @@
 #include <stdio.h>
-#include <cholesky.h>
+#include <stdlib.h>
+#include "cholesky.h"
+
+// use < > for standard headers
+// use " " for headers in the same directory as source code
 
 double runif(double a, double b){
     return ((double)rand()/(double)RAND_MAX)*(b-a)+a;
@@ -39,6 +43,7 @@ void mat_mult(int a_n, int a_m, int b_n, int b_m,
         }
     }
 
+// demonstrate transpose, matrix multiplication, and cholesky decomposition
 int main () {
     srand(0);
     int n = 11;
