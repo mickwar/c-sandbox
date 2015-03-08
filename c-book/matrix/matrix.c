@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "cholesky.h"
-// #include "determinant.h"
+#include "determinant.h"
 
 // use < > for standard headers
 // use " " for headers in the same directory as source code
@@ -64,23 +64,19 @@ int main () {
     transpose(n, m, matA, matB);
     mat_mult(m, n, n, m, matB, matA, matC);
 
-    mat_print(n, m, matA);
-    printf("\n");
-    mat_print(m, n, matB);
-    printf("\n");
-    mat_print(m, m, matC);
+//  mat_print(n, m, matA);
+//  printf("\n");
+//  mat_print(m, n, matB);
+//  printf("\n");
+//  mat_print(m, m, matC);
 
     double chol[m][m];
     cholesky(m, matC, chol);
-    printf("\n");
     mat_print(m, m, chol);
+    printf("\n");
 
-//  double xdet = 0;
-//  xdet = det(m, chol);
-//  printf("\n");
-//  printf("%f\n", xdet);
-    
-    
+    printf("%f\n", det(m, chol));
+    printf("%f\n", det(m, matC));
 
     return 0;
     }
