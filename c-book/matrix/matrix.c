@@ -75,8 +75,8 @@ int main () {
     mat_print(m, m, chol);
     printf("\n");
 
-    printf("%f\n", det(m, chol));
-    printf("%f\n", det(m, matC));
+    printf("%f\n", determinant(m, chol));
+    printf("%f\n", determinant(m, matC));
 
     return 0;
     }

@@ -20,7 +20,7 @@ void submatrix(int remove_row, int remove_col, int n, double x[n][n],
     }
 
 // Recursive algorithm for calculating determinant
-double det(int n, double x[n][n]){
+double determinant(int n, double x[n][n]){
     double sum = 0.0;
     if (n == 1){
         return x[0][0];
@@ -28,7 +28,7 @@ double det(int n, double x[n][n]){
         for (int i=0; i<n; i++){
             double xsub[n-1][n-1];
             submatrix(0, i, n, x, xsub);
-            sum += pow(-1.0, i) * x[0][i]*det(n-1, xsub);
+            sum += pow(-1.0, i) * x[0][i]*determinant(n-1, xsub);
             }
         return sum;
         }
