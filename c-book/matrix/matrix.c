@@ -19,6 +19,7 @@ void mat_print(int n, int m, double x[n][m]){
         printf("\n");
         }
     }
+#include "solve.h"
 
 // transpose the n by m matrix x so it is m by n
 void transpose(int n, int m, double in[n][m], double out[m][n]){
@@ -75,9 +76,13 @@ int main () {
     mat_print(m, m, chol);
     printf("\n");
 
-    printf("%f\n", determinant(m, chol, "triangle"));
-    printf("%f\n", determinant(m, chol, "le"));
-    printf("%f\n", determinant(m, matC, "pd"));
+//  printf("%f\n", determinant(m, chol, "triangle"));
+//  printf("%f\n", determinant(m, chol, "le"));
+//  printf("%f\n", determinant(m, matC, "pd"));
+
+    double inverse[m][m];
+    solve(m , chol, inverse);
+    mat_print(m, m, inverse);
 
     return 0;
     }
